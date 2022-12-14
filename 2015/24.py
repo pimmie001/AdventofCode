@@ -5,7 +5,7 @@ with open("24.txt") as fh:
 for i in range(len(input)): input[i] = int(input[i])
 
 ######
-n = 3           # '3' for part 1 and '4' for part 2
+n = 4           # '3' for part 1 and '4' for part 2
 ######
 
 weight = sum(input)//n
