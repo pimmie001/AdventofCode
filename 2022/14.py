@@ -24,8 +24,6 @@ sand_spawn = 500,0
 sand = set()
 
 def move_sand():
-    global sand
-
     x, y = sand_spawn
     while True:
         if (x,y+1) not in rocks and (x,y+1) not in sand: # move below
@@ -54,8 +52,6 @@ while True:
 ### part 2:
 
 def move_sand2():
-    global sand
-
     x, y = sand_spawn
     while sand_spawn not in sand:
         if y == ymax + 1: # sand reached floor
@@ -77,7 +73,6 @@ def move_sand2():
     return len(sand)
 
 
-sand = set()
 while True:
     result = move_sand2()
     if result is not None:
