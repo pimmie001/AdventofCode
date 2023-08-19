@@ -49,13 +49,6 @@ def move_rock(positions, current_rocks, direction = 'v'):
         return new_positions
 
 
-def check_rest(positions, floor):
-    for x,y in positions:
-        if floor[x] + 1 == y:
-            return True
-    return False
-
-
 
 floor = [0]*7 # for each x-coordinate: the highest level of rock
 current_rocks = set()
@@ -63,7 +56,7 @@ for x in range(7):
     current_rocks.add((x,-0))
 
 
-rocknum = 0 
+rocknum = 0
 gasnum = 0
 while rocknum < 2022:
     rock = rocks[rocknum % len(rocks)]
@@ -77,7 +70,7 @@ while rocknum < 2022:
         gasnum += 1
 
         positions = move_rock(positions, current_rocks, direction = gas_dir)
-        positions, rest = move_rock(positions, current_rocks)
+        positions, rest = move_rock(positions, current_rocks, direction = 'v')
 
     for x,y in positions:
         floor[x] = max(floor[x], y)
@@ -85,3 +78,4 @@ while rocknum < 2022:
 
 
 print(max(floor)) # part 1: 3147
+
