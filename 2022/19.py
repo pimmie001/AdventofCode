@@ -12,9 +12,9 @@ for x in content:
     blueprints.append([int(y) for y in numbers])
 
 
-def model(costs):
+def model(costs, min = 24):
     materials = [0,1,2,3] # ore, clay, obsidian, geode
-    minutes = range(1, 25)
+    minutes = range(1, min + 1)
 
     ### ILP model
     m = gp.Model('model')
@@ -29,8 +29,8 @@ def model(costs):
     Dict = {}
     count = 0
     for i in minutes:
-        for mat in materials: ###############! UB???
-            x = m.addVar(obj = (i == 24 and mat == 3), ub = 1000, name = f'x^{i}_{mat}') # number of available materials at time i
+        for mat in materials:
+            x = m.addVar(obj = (i == min and mat == 3), name = f'x^{i}_{mat}') # number of available materials at time i
             xvars.append(x)
 
             y = m.addVar(name = f'y^{i}_{mat}') # number of robots at begin of time i
@@ -71,7 +71,7 @@ def model(costs):
     for mat in materials:
         m.addConstr(zvars[Dict[1,mat]] == 0)
 
-    # 3.2 if z^i_j is 1, should have enough material at time i-1 #! not needed since x^i_j >= 0 ?
+    # 3.2 if z^i_j is 1, should have enough material at time i-1
     for i in minutes[1:]:
         m.addConstr(xvars[Dict[i-1,0]] >= costs[0] * zvars[Dict[i,0]] + costs[1] * zvars[Dict[i,1]] \
                     + costs[2] * zvars[Dict[i,2]] + costs[4] * zvars[Dict[i,3]]) # enough ore
@@ -90,12 +90,18 @@ def model(costs):
     return m.ObjVal
 
 
-### answer
+### part 1
 total = 0
 for i in range(len(blueprints)):
     total += (i+1) * model(blueprints[i])
 print(total) # 1395
 
+
+### part 2
+A = []
+for i in range(3):
+    A.append(model(blueprints[i], min=32))
+print(A[0]*A[1]*A[2]) # 2700
 
 
 
