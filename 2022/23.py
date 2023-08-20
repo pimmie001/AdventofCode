@@ -73,17 +73,17 @@ def print_map(locations):
 priority = [propose_north, propose_south, propose_west, propose_east] # order of considering movements
 
 ### main loop
-# print_map(elves_locations)
-for _ in range(10):
+count = 1 # for part 2
+# for _ in range(10): #! part 1
+while True: #! part 2
     ## determine the proposition
     propositions = []
+    elves_location_set = set(elves_locations) # giving set to 'propose' functions is much faster
     for i,(x,y) in enumerate(elves_locations):
-        if (x,y) == (2,1):
-            a = 'sdfkljwelkjrflkwwe'
         all_clear = True
         is_stuck = True
         for f in priority[::-1]:
-            can_move, to_location = f(x,y, elves_locations)
+            can_move, to_location = f(x,y, elves_location_set)
             if can_move:
                 proposition = to_location
                 is_stuck = False
@@ -103,15 +103,22 @@ for _ in range(10):
             elves_locations_new.append(propositions[i])
         else:
             elves_locations_new.append(elves_locations[i])
+
+    if elves_locations == elves_locations_new: # for part 2
+        print(count) # answer part 2: 935
+        break
+
     elves_locations = elves_locations_new
     # print_map(elves_locations)
 
     ## change priority
     priority.append(priority.pop(0))
 
+    count += 1 # for part 2
 
 
-### part 1
+
+### answer part 1
 xmin = ymin = float('inf')
 xmax = ymax = float('-inf')
 for (x,y) in elves_locations:
@@ -125,5 +132,3 @@ for (x,y) in elves_locations:
         ymax = y
 
 print((xmax-xmin+1)*(ymax-ymin+1)-len(elves_locations)) # 4025
-
-
