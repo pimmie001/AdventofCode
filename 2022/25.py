@@ -71,6 +71,6 @@ def dec_to_SNAFU(number):
     return result
 
 
-### answer part 1
+### answer day 25
 print(dec_to_SNAFU(total_dec)) # 2-2=21=0021=-02-1=-0 
 
