@@ -121,7 +121,7 @@ def shortest_path(state, target, memo=None):
     for dx, dy in [(0,1), (-1,0), (0,-1), (1,0), (0,0)]:
         new_state = (x+dx, y+dy, min+1)
         value_new_state = shortest_path(new_state, target, memo)
-        if value_new_state < value_state:
+        if 1 + value_new_state < value_state:
             value_state = 1 + value_new_state
 
     memo[state] = value_state
