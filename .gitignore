@@ -1,7 +1,8 @@
+**/.vscode/
+
 # python
 **/.ipynb_checkpoints/
 **/__pycache__/
-**/.vscode/
 
 # c++
 *.exe 
