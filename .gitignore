@@ -1,4 +1,10 @@
+# python
 **/.ipynb_checkpoints/
 **/__pycache__/
 **/.vscode/
+
+# c++
+*.exe 
+
+# test files
 **/test*
