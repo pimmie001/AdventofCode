@@ -34,10 +34,30 @@ int captcha(std::string input) {
 }
 
 
+int captcha2(std::string input) {
+    int result = 0;
+
+    for (size_t i = 0; i < input.length(); ++i) {
+        char digit = input[i];
+        char next_digit = input[(i + input.length()/2) % input.length()];
+
+        if (digit == next_digit) {
+            result += digit - '0';
+        }
+    }
+
+    return result;
+}
+
+
 int main() {
     std::string input = read_file();  // read the input
-    int result = captcha(input);  // do the captcha
 
+    int result = captcha(input);  // do the captcha
     std::cout << result << std::endl;  // answer part 1: 997
+
+    int result2 = captcha2(input); 
+    std::cout << result2 << std::endl;  // answer part 2: 1358
+
     return 0;
 }
