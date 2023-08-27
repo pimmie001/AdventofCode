@@ -1,18 +1,10 @@
-import gurobipy as gp
-from gurobipy import GRB
-
-
 with open('21.txt') as fh:
-    content = fh.read().split('\n')
+    input = fh.read().split('\n')
 
-
-set_of_monkeys = set()
 dic = {}
-for line in content:
+for line in input:
     a,b = line.split(': ')
-
-    set_of_monkeys.add(a)
-
+    
     if '*' in b:
         b1, b2 = b.split(' * ')
         dic[a] = ('*', b1, b2)
@@ -26,49 +18,80 @@ for line in content:
         b1, b2 = b.split(' - ')
         dic[a] = ('-', b1, b2)
     else:
-        dic[a] = (int(b), None, None)
+        dic[a] = int(b)
 
 
-## setup model
-m = gp.Model('model')
-m.modelsense = GRB.MINIMIZE
+def f(x, memo={}):
+    # computes value giving starting values in memo
+
+    if x in memo:
+        return memo[x]
+
+    value = dic[x]
+
+    if type(value) == int:
+        result = value
+    elif value[0] == '*':
+        result = f(value[1], memo) * f(value[2], memo)
+    elif value[0] == '/':
+        result = f(value[1], memo) / f(value[2], memo)
+    elif value[0] == '+':
+        result = f(value[1], memo) + f(value[2], memo)
+    elif value[0] == '-':
+        result = f(value[1], memo) - f(value[2], memo)
+
+    memo[x] = result
+    return result
 
 
-## create variables
-vars = []
-vars_dict = {}
+### return true/false if root is matched, and return the difference of the numbers
+match = ['qpct', 'dthc'] # numbers that need to match 
+def root_match(humn):
+    memo = {'humn': humn}
+
+    qpct = f(match[0], memo)
+    dthc = f(match[1], memo)
+    if qpct == dthc:
+        return True, 0
+    else: 
+        return False, qpct - dthc
+
+
+### 1. try go get humn close by using difference
+humn1 = 0 # will increase in difference
+humn2 = 0 # will decrease in difference
 i = 0
-for a in set_of_monkeys:
-    x = m.addVar(lb = float('-inf'), obj = (a == 'humn'), name = f'x_{a}')
-    vars.append(x)
-    vars_dict[a] = i
+while i < 1000:
+    success, difference1 = root_match(humn1)
+    success, difference2 = root_match(humn2)
+
+    humn1 += difference1//100
+    humn2 -= difference2//100
+
     i += 1
 
 
-## constraints
-for a in dic:
-    if a == 'root':
-        b1, b2 = dic[a][1:]
-        m.addConstr(vars[vars_dict[b1]] == vars[vars_dict[b2]])
-    elif a == 'humn':
-        pass
-    else:
-        v, b1, b2 = dic[a]
-        if v == '*':
-            m.addConstr(vars[vars_dict[a]] == vars[vars_dict[b1]] * vars[vars_dict[b2]])
-        elif v == '/':
-            vars[vars_dict[b1]]
-            m.addConstr(vars[vars_dict[a]] * vars[vars_dict[b2]] == vars[vars_dict[b1]])
-        elif v == '+':
-            m.addConstr(vars[vars_dict[a]] == vars[vars_dict[b1]] + vars[vars_dict[b2]])
-        elif v == '-':
-            m.addConstr(vars[vars_dict[a]] == vars[vars_dict[b1]] - vars[vars_dict[b2]])
-        else:
-            m.addConstr(vars[vars_dict[a]] == int(v))
+### 2. determine wether humn1 or humn2 was the closest
+if abs(difference1) < abs(difference2):
+    humn = humn1
+else:
+    humn = humn2
 
 
-## solve
-m.setParam('NonConvex', 2)
-m.setParam('OutputFlag', False)
-m.optimize()
-print(int(m.ObjVal)) # part 2: 3592056845086
+### 3. add and substract one each iteration
+success = False
+add = 0
+while not success:
+    success, _ = root_match(humn + add)
+    if success:
+        print(humn + add)
+        break
+
+    success, _ = root_match(humn - add)
+    if success:
+        print(humn - add)
+        break
+
+    add += 1
+
+### answer part 2: 3592056845086
