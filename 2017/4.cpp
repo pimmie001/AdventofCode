@@ -5,13 +5,15 @@
 #include <string>
 #include <regex>
 
-
 using namespace std;
 
 
-bool valid(vector<string> vect) {
+bool valid(vector<string> vect, bool part2 = false) {
     set<string> my_set;
-    for (const string& x : vect) {
+    for (string& x : vect) {
+        if (part2) {
+            sort(x.begin(), x.end());
+        }
         if (my_set.find(x) != my_set.end()) {
             return false;
         }
@@ -26,6 +28,7 @@ int main () {
     regex pattern("[a-zA-Z]+");
 
     int result = 0;
+    int result2 = 0;
     string line;
     while (getline(inputFile, line)) {
         sregex_iterator iter(line.begin(), line.end(), pattern); // find matches
@@ -38,9 +41,11 @@ int main () {
         }
 
         result += valid(vect);
+        result2 += valid(vect, true);
     }
 
     cout << result << endl; // part 1: 451
+    cout << result2 << endl; // part 2: 223
 
     return 0;
 }
