@@ -1,5 +1,6 @@
 #include <iostream>
 #include <unordered_set>
+#include <unordered_map>
 #include <vector>
 #include <algorithm>
 
@@ -61,14 +62,14 @@ int change_state(int state[], int n) {
 
 
 // check if state already in previous states
-bool check_state(int state[], int n, unordered_set<size_t>& previous_states) {
+int check_state(int state[], int n, int iteration, unordered_map<size_t, int>& previous_states) {
     size_t key = hash_state(state, n);
 
     if (previous_states.find(key) != previous_states.end()) {
-        return true;
+        return previous_states[key];
     }
-    previous_states.insert(key); // add key in-place
-    return false;
+    previous_states[key] = iteration; // add value in-place
+    return 0;
 }
 
 
@@ -77,17 +78,20 @@ int main() {
     int state[] = {14, 0, 15, 12, 11, 11, 3, 5, 1, 6, 8, 4, 9, 1, 8, 4}; // own input
     int n = sizeof(state) / sizeof(state[0]);
 
-    unordered_set<size_t> previous_states;
-    bool success = check_state(state, n, previous_states); // add state to set and set success
-
+    unordered_map<size_t, int> previous_states;
     int iteration = 0;
-    while (!success) {
-        change_state(state, n);
-        success = check_state(state, n, previous_states);
-        iteration++;
-    }
+    int success = check_state(state, n, iteration, previous_states); // add state to map
 
-    cout << iteration << endl; // part 1: 11137
+    while (true) {
+        change_state(state, n);
+        iteration++;
+        success = check_state(state, n, iteration, previous_states);
+        if (success) {
+            cout << iteration << endl; // part 1: 11137
+            cout << iteration - success << endl; // part 2: 1037
+            break;
+        }
+    }
 
     return 0;
 }
