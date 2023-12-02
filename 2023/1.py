@@ -1,6 +1,3 @@
-import re
-
-
 with open('1.txt') as fh:
     content = fh.read().split('\n')
 
