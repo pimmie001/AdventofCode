@@ -25,3 +25,24 @@ print(count) # part 1: 2720
 
 
 
+def power(A):
+    minimum = {'red':0, 'green':0, 'blue':0}
+    for x in A:
+        y = x.split(', ')
+        for z in y:
+            n, color = z.split(' ')
+            minimum[color] = max(minimum[color], int(n))
+
+    prod = 1
+    for color in minimum:
+        prod *= minimum[color]
+    return prod
+
+
+total = 0
+for id,line in enumerate(content):
+    A = line.split(': ')[1].split('; ')
+
+    total += power(A)
+
+print(total) # part 2: 71535
