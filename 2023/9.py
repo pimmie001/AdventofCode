@@ -23,10 +23,22 @@ def get_value(history):
         new_val = layers[-i-2][-1] + right_values[-1]
         right_values.append(new_val)
 
-    return right_values[-1]
+
+    ## get value for part 2
+    left_values = [0]
+    for i in range(len(layers)-1):
+        new_val = layers[-i-2][0] - left_values[-1]
+        left_values.append(new_val)
+
+
+    return right_values[-1], left_values[-1]
 
 
 total = 0
+total2 = 0
 for history in histories:
-    total += get_value(history)
+    values = get_value(history)
+    total += values[0]
+    total2 += values[1]
 print(total) # part 1: 1637452029
+print(total2) # part 2: 908
