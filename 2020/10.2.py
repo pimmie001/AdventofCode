@@ -1,4 +1,4 @@
-with open ('test.txt') as fh:
+with open ('10.txt') as fh:
     input = fh.read().split()
 input = list(map(int, input))
 
