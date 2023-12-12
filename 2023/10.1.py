@@ -25,16 +25,16 @@ def find_adj_pipes(x, y, visited):
             continue
 
         if (dx,dy) == (1,0):
-            if pipes[(x+dx, y+dy)] in ['7', 'J', '-']:
+            if pipes[(x+dx, y+dy)] in ['7', 'J', '-', 'S']:
                 adjacent.append((x+dx, y+dy))
         elif (dx,dy) == (-1,0):
-            if pipes[(x+dx, y+dy)] in ['L', 'F', '-']:
+            if pipes[(x+dx, y+dy)] in ['L', 'F', '-', 'S']:
                 adjacent.append((x+dx, y+dy))
         elif (dx,dy) == (0,1):
-            if pipes[(x+dx, y+dy)] in ['L', 'J', '|']:
+            if pipes[(x+dx, y+dy)] in ['L', 'J', '|', 'S']:
                 adjacent.append((x+dx, y+dy))
         elif (dx,dy) == (0,-1):
-            if pipes[(x+dx, y+dy)] in ['7', 'F', '|']:
+            if pipes[(x+dx, y+dy)] in ['7', 'F', '|', 'S']:
                 adjacent.append((x+dx, y+dy))
 
     return adjacent
@@ -53,133 +53,5 @@ while all_pipes[-1]:
     all_pipes.append(new_pipes)
 
 
-print(len(all_pipes) - 2) # first one is ['S'] and last one is empty list so these two dont count
-# part 1: 7063
-
-
-##### part 2 #! not finished: probably because some pipes that are connected to loop but not part of loop are in set visited
-
-
-def print_map(visited=visited):
-    for y in range(n):
-        for x in range(m):
-            if (x,y) in visited:  
-                print('#', sep='', end='')
-            else:
-                print('.', sep='', end='')
-        print()
-
-
-def can_escape(x, y, memo={}, previous=set()):
-    """Returns whether location x,y can escape the map without running into the bounary (loop of pipes)."""
-
-    ## base cases
-    if (x,y) in visited:
-        return False
-
-    if x < 0 or y < 0 or x > m or y > n:
-        return True
-
-    if (x,y) in memo:
-        return memo[(x,y)]
-
-
-    ## other cases
-    previous.add((x,y))
-    for (dx,dy) in [(1,0), (-1,0), (0,1), (0,-1)]:
-        if (x+dx, y+dy) not in previous and can_escape(x+dx, y+dy, memo, previous):
-            memo[(x,y)] = True
-            return True
-
-    memo[(x,y)] = False
-    return False
-
-print()
-total = 0
-for x in range(m):
-    for y in range(n):
-        previous = set()
-        memo = {}
-        if (x,y) not in visited and not can_escape(x, y, memo, previous):
-            print(x,y)
-            total += 1
-print('\n', total)
-
-x, y = 3,2
-memo = {}
-previous = set()
-print(can_escape(x, y, memo, previous))
-
-
-print_map()
-
-# total = 0
-# memo = {}
-# for x in range(m):
-#     for y in range(n):
-#         total += not can_escape(x, y, memo)
-# print(total)
-
-print('finished')
-
-# # for each x coordinate (0,...,m-1), find the y coordinates of pipes that are in loop
-# # eg X_list = [[0,2], [1,2]] means that (0,0),(0,2),(1,1),(1,2) are pipes in the loop
-# X_list = []
-# for x in range(m):
-#     temp = []
-#     for y in range(n):
-#         if (x,y) in visited:
-#             temp.append(y)
-#     X_list.append(temp)
-
-# # do same for y
-# Y_list = []
-# for y in range(n):
-#     temp = []
-#     for x in range(m):
-#         if (x,y) in visited:
-#             temp.append(x)
-#     Y_list.append(temp)
-
-
-# def checkx(x, y):
-#     # check whether x coordinate can be contained in loop
-
-#     if x in Y_list[y]:
-#         return False
-
-#     contained = False
-#     Y = Y_list[y].copy()
-#     Y.insert(0, -1)
-#     for i in range(len(Y) - 1):
-#         if Y[i] < x and x < Y[i+1]:
-#             return contained
-#         contained = not contained
-
-#     return False
-
-
-# def checky(x, y):
-#     # check whether x coordinate can be contained in loop
-
-#     if y in X_list[x]:
-#         return False
-
-#     contained = False
-#     X = X_list[x].copy()
-#     X.insert(0, -1)
-#     for i in range(len(X) - 1):
-#         if X[i] < y and y < X[i+1]:
-#             return contained
-#         contained = not contained
-
-#     return False
-
-
-# total = 0
-# for x in range(m):
-#     for y in range(n):
-#         total += checkx(x,y) and checky(x,y)
-# print(total)
-# # 264 too low
-# 861 too high
+furthest = len(all_pipes) - 2 # first one is ['S'] and last one is empty list so these two dont count
+print(f'Part 1: {furthest}') # part 1: 7063
