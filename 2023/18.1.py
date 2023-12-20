@@ -48,9 +48,6 @@ class node:
                 neighbor = node_dict[(x,y)]
                 self.neighbors.append(neighbor)
 
-    def __lt__(self, other):
-        return False
-
 
 def dijkstra(nodes, start):
     # dijkstra shortest path algorithm: returns distance from start to all other nodes
