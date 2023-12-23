@@ -38,7 +38,7 @@ while current:
         for (dx, dy) in get_directions(x,y):
             if (x+dx,y+dy) in visited[i] or y+dy < 0:
                 continue
-            
+
             if (x,y) == end:
                 path_lenghts.append(len(new_vis))
                 continue
