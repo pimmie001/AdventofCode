@@ -48,3 +48,6 @@ for i in range(len(hailstones)):
             x,y,t1,t2 = intersect
             count += min(x,y) >= LB and max(x,y) <= UB and min(t1,t2) >= 0 # check if within bounds and if in future
 print(count) # part 1: 21679
+
+
+
