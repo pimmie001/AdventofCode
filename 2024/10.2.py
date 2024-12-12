@@ -26,4 +26,4 @@ for y in range(len(grid)):
     for x in range(len(grid[0])):
         if int(grid[y][x]) == 0:
             total += search([(x,y)], 0)
-print(total) # part 1: 688
+print(total) # part 2: 1459
