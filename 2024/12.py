@@ -52,7 +52,7 @@ def get_perimeter(region):
         for (dx,dy) in ((1,0), (0,1), (-1,0), (0,-1)):
 
             if (x+dx, y+dy) not in region:
-                perimeter_locations.add((x+dx/2, y+dy/2))
+                perimeter_locations.add((x+dx/4, y+dy/4))
 
     return perimeter_locations
 
@@ -109,12 +109,8 @@ def get_sides(perimeter):
 
     return side_count
 
-print()
+
 total = 0
 for region in regions:
-    x,y = next(iter(region))
-    print(grid[y][x])
-    # total += len(region) * get_sides(get_perimeter(region))
-    print(get_sides(get_perimeter(region)))
-# print(total) # part
-#  2: 898582 too low
+    total += len(region) * get_sides(get_perimeter(region))
+print(total) # part 2: 904114
