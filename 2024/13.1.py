@@ -15,7 +15,7 @@ def fewest_tokens(machine, x=0, y=0, current_spend=0, memo={}):
     Function that takes as input machine (tuple of length 6 describing what buttons do an how to win), 
     and the nummer of currently spend tokens (current_spend). x and y are current x and y values. 
     Returns minimum number of tokens required to win, and infinity if not possible.
-    Uses memoization.
+    Not sure if memo works as supposed to. 
     """
 
     ### Base cases
@@ -26,7 +26,7 @@ def fewest_tokens(machine, x=0, y=0, current_spend=0, memo={}):
         return current_spend
 
     if (x,y) in memo:
-        return memo[(x,y)] + current_spend
+        return memo[(x,y)]
 
 
     ### Return minimum of both moves
