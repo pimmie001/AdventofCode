@@ -19,4 +19,4 @@ for _ in range(25):
     for stone in stones:
         new_stones.extend(apple_rule(stone))
     stones = new_stones
-print(len(stones))
+print(len(stones)) # part 1: 184927
