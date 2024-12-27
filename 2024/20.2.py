@@ -35,26 +35,48 @@ while unvisited:
     dist += 1
 
 
+### some functions
+def manhattan_distance(s,e):
+    """Returns manhattan distance between s and e"""
+    return abs(s[0]-e[0]) + abs(s[1]-e[1])
+
+
+def get_endpoints(s, distance=20):
+    """Given start point s, and allowed (maximum) manhattan distance, returns list of all possible end points within grid"""
+
+    x,y = s
+    end_points = []
+
+    for dx in range(-distance, distance + 1):
+        for dy in range(-distance + abs(dx), distance - abs(dx) + 1):
+            if 0 <= x + dx < n and 0 <= y + dy < m: # check if within grid
+                end_points.append((x + dx, y + dy))
+
+    return end_points
+
+
 def cheat_score(s, e):
     """
     Given s and e (start and end coordinates of cheat location), returns number of saved seconds by using cheat
     Note that start and end have a manhattan distance of 2
     """
 
-    if not (0 <= e[0] < n and 0 <= e[1] < m): # out of grid
-        return -1
-
     if grid[e[1]][e[0]] == '#': # cheat not allowed
         return -1
 
-    return distances[s] - distances[e] - 2
+    return distances[s] - distances[e] - manhattan_distance(s, e)
 
 
-score_list = {}
+### calculation
+checked_cheats = set()
+total = 0
+i = 0
 for (x,y) in race_track:
-    for (dx,dy) in [(1,1), (1,-1), (-1,1), (-1,-1), (2,0), (-2,0), (0,2), (0,-2)]:
-        s = (x,y)
-        e = s[0]+dx, s[1]+dy
-        score_list[s, e] = cheat_score(s, e)
+    s = (x,y)
+    for e in get_endpoints(s):
+        if (s,e) not in checked_cheats:
+            if cheat_score(s, e) >= 100:
+                total += 1
+            checked_cheats.add((s,e))
 
-print(sum(1 for x in score_list.values() if x >= 100)) # part 1: 1448
+print(total) # part 2: 1017615 
